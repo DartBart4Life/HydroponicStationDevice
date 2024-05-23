@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hydroponic Station</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+
+<body bgcolor=#98FB98>
+    <div style="text-align:center">
+    <button id="submitAUTO">Avt rezh vkl</button><br><br><br>
+    <button id="submitON">Vklychenie</button><br><br><br>
+    <button id="submitOFF">Otkluchenie)</button><br><br><br>
+    </div>
+    <img src="Plants-Vs-Zombies-PNG-Clipart.png" alt="Подсолнух" width="250" height="300">
+    <img src="LastFiolet.png" alt="Растение с зубами" width="350" height="300" align="right">
+    
+    <script>
+        $(document).ready(function(){
+            $("#submitON").click(function(){
+                $.ajax({
+                    type: "POST",
+                    url: "GetValue.php",
+                    data: { action: 'ON' },
+                    success: function(response) {
+                                            }
+                });
+            });
+             $("#submitOFF").click(function(){
+                $.ajax({
+                    type: "POST",
+                    url: "GetValue.php",
+                    data: { action: 'OFF' },
+                    success: function(response) {
+                                            }
+                });
+            });
+             $("#submitAUTO").click(function(){
+                $.ajax({
+                    type: "POST",
+                    url: "GetValue.php",
+                    data: { action: 'AUTO' },
+                    success: function(response) {
+                                            }
+                });
+            });
+
+        });
+    </script>
+
+
+    
+    
+    <div id="data"></div>
+    <script>
+        function loadData() {
+            $.ajax({
+                url: "GetValue.php",
+                type: "GET",
+                success: function(response) {
+                    $('#data').html(response);
+                }
+            });
+        }
+
+        // Запрашиваем данные каждые 30 секунд
+        loadData();
+        setInterval(loadData, 1000);
+    </script>
+   
+    
+    
+    
+</body>
+</html>
