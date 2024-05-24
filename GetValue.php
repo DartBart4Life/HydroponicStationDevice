@@ -40,7 +40,7 @@ $sql = "SELECT Id, Temp, Stat FROM `Temperature` ORDER BY Id DESC LIMIT 1";
  $result = $conn->query($sql); 
 
 // Вывод данных
-echo '<div style="text-align:center; color:red; font-size:55px;">';
+echo '<div style="text-align:center; color:blue; font-size:55px;"> Uroven vlazhnosti: ';
 foreach ($result as $row) {
     echo '<b>'. $row['Temp']. '</b><br>'. '<br>';
 }
