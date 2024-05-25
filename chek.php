@@ -13,6 +13,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Проверка соединения
 if ($conn->connect_error) {
+    header('HTTP/1.1 404 Not Found');
     die("Connection failed: " . $conn->connect_error);
 }
 // Запрос данных из таблицы

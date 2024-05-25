@@ -31,6 +31,7 @@ else if (isset($_POST['action']) && $_POST['action'] == 'AUTO')
 
 // Проверка соединения
 if ($conn->connect_error) {
+    header('HTTP/1.1 404 Not Found');
     die("Connection failed: " . $conn->connect_error);
 }
 

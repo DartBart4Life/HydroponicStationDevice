@@ -1,74 +1,38 @@
-import sys
 import requests
 import time
 import datetime
-from bs4 import BeautifulSoup
 
-patchtemp = '/home/rasp/temp.txt'
-patchstat = '/home/rasp/stat.txt'
-url_check = 'http://egorsiao.beget.tech/chek.php'
-
+patchtemp='/home/rasp/temp.txt'
+patchstat='/home/rasp/stat.txt'
 
 def read_file(patchtemp):
-	with open(patchtemp, 'r') as file:
-		value = file.read().strip()
+	with open(patchtemp,'r') as file:
+		value=file.read().strip()
 	return value
 
-
 def stat_file(patchstat):
-	with open(patchstat, 'r') as file:
-		stat = file.read().strip()
+	with open(patchstat,'r') as file:
+		stat=file.read().strip()
 	return stat
-
-
-def save_temp_to_file(stat, patchstat):
+	
+def save_temp_to_file(stat,patchstat):
 	with open(patchstat, 'w') as file:
 		file.write(str(stat))
-
-
-# stat 0-off 1-on 2-autoOn 3-autoOff
-def check_stat():
-	response = requests.get(url_check)
-	if response.status_code == 200:
-		soup = BeautifulSoup(response.text, 'html.parser')
-		otvet = soup.find('p', id='otvev')
-		if otvet:
-			otvet_text = otvet.text
-			return otvet_text
-		else:
-			print("Тег <p id='otvet'> не найден", file=sys.stderr)
-			return 0
-	else:
-		print("Ошибка при выполнении запроса", file=sys.stderr)
-
+		file.close()
 
 while True:
-
-	value = read_file(patchtemp)
-	time.sleep(1)
-	flag = check_stat()
-	if flag == '2':
-		if int(value) < 65:
-			print('avtoOn')
-			save_temp_to_file(2, patchstat)
-			time.sleep(1)
-		else:
-			save_temp_to_file(3, patchstat)
-			print('avtoOff')
-			time.sleep(1)
-	elif flag == '1':
-		print('on')
-		save_temp_to_file(1, patchstat)
-		time.sleep(1)
-	else:
-		print('off')
-		save_temp_to_file(0, patchstat)
-		time.sleep(1)
-	stat = stat_file(patchstat)
-	url = 'http://egorsiao.beget.tech/Zapis.php?Temp=' + \
-			str(value) + '&Stat=' + str(stat)
-	response = requests.get(url)
-	print('Time otpr:' + str(datetime.datetime.now()))
-	print(url)
-
-	time.sleep(30)
+  
+  value=read_file(patchtemp)
+  time.sleep(1)
+  if int(value)<65:
+    save_temp_to_file(1,patchstat)
+    time.sleep(1)
+  else:
+    save_temp_to_file(0,patchstat)
+    time.sleep(1)
+  stat=stat_file(patchstat)
+  url='http://egorsiao.beget.tech/Zapis.php?Temp='+str(value)+'&Stat='+str(stat)
+  response=requests.get(url)
+  print('Time otpr:'+str(datetime.datetime.now()))
+  print(url)
+  time.sleep(30)

@@ -6,20 +6,29 @@ $servername = "localhost";
 $username = "egorsiao_temp";
 $password = "123Qwe";
 $dbname = "egorsiao_temp";
-$Temp = $_GET['Temp'];
-$Stat = $_GET['Stat'];
+
 
 // Создание подключения
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Проверка соединения
 if ($conn->connect_error) {
+    header('HTTP/1.1 404 Not Found');
     die("Connection failed: " . $conn->connect_error);
 }
-// Запрос данных из таблицы 
-$sql = "INSERT INTO `Temperature`(Temp, Stat) VALUES ($Temp, $Stat)"; 
 
+// Получение данных из GET-параметров
+$Temp = $_GET['Temp'] ?? '';
+$Stat = $_GET['Stat'] ?? '';
 
- $result = $conn->query($sql); 
+// Запрос данных из таблицы
+$stmt = $conn->prepare("INSERT INTO Temperature(Temp, Stat) VALUES (?, ?)");
+$stmt->bind_param("ss", $Temp, $Stat);
+$stmt->execute();
 
+// Закрытие подготовленного выражения
+$stmt->close();
+
+// Закрытие соединения
+$conn->close();
 ?>
